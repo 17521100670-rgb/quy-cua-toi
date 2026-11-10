@@ -16,4 +16,4 @@ Allow: /
 User-agent: *
 Allow: /
 
-Sitemap: https://17521100670-rgb.github.io/so-lenh-quy/sitemap.xml
+Sitemap: https://17521100670-rgb.github.io/quy-cua-toi/sitemap.xml

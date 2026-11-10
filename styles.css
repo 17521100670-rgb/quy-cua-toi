@@ -272,3 +272,16 @@ tbody tr:last-child td { border-bottom: 0; }
   .howto-steps { grid-template-columns: minmax(0, 1fr); }
   .hero-actions .btn { width: 100%; }
 }
+
+/* ---- v2: XIRR, NAV cũ, mục tiêu, nhập CSV, sao lưu ---- */
+.xirr-block { margin: var(--space-lg) 0; padding: var(--space-md) var(--space-lg); border: var(--rule-hair) solid var(--color-rule); border-radius: var(--radius-md); background: var(--color-paper); }
+.xirr-line { margin: 0; font-size: var(--text-md); }
+.nav-age { font-size: var(--text-sm); color: var(--color-muted); }
+.nav-age--stale { color: var(--color-error); }
+.goal-block { margin-top: var(--space-lg); }
+.goal-progress { margin-top: var(--space-md); }
+textarea { width: 100%; padding: var(--space-sm) var(--space-md); border: var(--rule-hair) solid var(--color-rule); border-radius: var(--radius-md); resize: vertical; font: inherit; background: var(--color-paper); }
+input[type="file"] { height: auto; padding: var(--space-sm) 0; border: 0; background: transparent; }
+#csv-mapping select { height: 40px; border: var(--rule-hair) solid var(--color-rule); border-radius: var(--radius-md); background: var(--color-paper); font: inherit; }
+.import-errors { color: var(--color-error); font-size: var(--text-sm); }
+.import-errors p { margin: var(--space-xs) 0; }
