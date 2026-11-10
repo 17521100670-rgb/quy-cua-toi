@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{BRAND_NAME}}: Ghi lệnh chứng chỉ quỹ, xem danh mục xuyên app</title>
+<meta name="description" content="{{BRAND_NAME}} ghi lệnh chứng chỉ quỹ trên trình duyệt, xem phân bổ danh mục xuyên Fmarket, Topi và Anfin trong một chỗ. Dữ liệu chỉ lưu trên máy bạn.">
+<link rel="canonical" href="{{SITE_URL}}">
+<meta property="og:title" content="{{BRAND_NAME}}: Ghi lệnh chứng chỉ quỹ, xem danh mục xuyên app">
+<meta property="og:description" content="{{BRAND_TAGLINE}}">
+<meta property="og:url" content="{{SITE_URL}}">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="vi_VN">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@700&family=Instrument+Sans:wght@400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script>document.documentElement.classList.add('js');</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "{{BRAND_NAME}}",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Web browser",
+  "inLanguage": "vi",
+  "url": "{{SITE_URL}}",
+  "author": {"@type": "Person", "name": "Trọng", "description": "{{AUTHOR_BIO}}"},
+  "datePublished": "2026-11-10",
+  "dateModified": "{{UPDATED}}",
+  "offers": {"@type": "Offer", "price": "0", "priceCurrency": "VND"},
+  "description": "{{BRAND_TAGLINE}}"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type": "Question", "name": "Theo dõi chứng chỉ quỹ như thế nào?", "acceptedAnswer": {"@type": "Answer", "text": "Ghi từng lệnh mua và bán, kèm quỹ, ngày, số tiền và NAV lúc giao dịch. Nhập NAV hiện tại của từng quỹ, sổ tự tính phân bổ, tổng đã đầu tư, giá trị hiện tại và lãi lỗ."}},
+    {"@type": "Question", "name": "Xem tất cả quỹ ở nhiều app trong một chỗ được không?", "acceptedAnswer": {"@type": "Answer", "text": "Được. Bạn ghi lệnh từ Fmarket, Topi, Anfin hay bất cứ app nào vào cùng một sổ, danh mục hiển thị gộp theo quỹ, không cần đăng nhập app nào cả."}},
+    {"@type": "Question", "name": "Dữ liệu của tôi có rời khỏi máy không?", "acceptedAnswer": {"@type": "Answer", "text": "Không. Dữ liệu chỉ lưu trong localStorage trên trình duyệt của bạn. Xóa dữ liệu trình duyệt là mất sổ, nên hãy xuất file CSV cuối mỗi tháng để giữ bản sao."}},
+    {"@type": "Question", "name": "NAV là gì, lấy ở đâu?", "acceptedAnswer": {"@type": "Answer", "text": "NAV là giá một chứng chỉ quỹ, do công ty quản lý quỹ công bố mỗi ngày giao dịch. Bạn xem NAV trong app mình mua quỹ rồi nhập tay vào sổ."}},
+    {"@type": "Question", "name": "Sổ có gợi ý nên mua quỹ nào không?", "acceptedAnswer": {"@type": "Answer", "text": "Không. Sổ chỉ ghi chép và tính toán từ số bạn nhập. Sổ không khuyến nghị mua, bán hay nắm giữ quỹ nào, không xếp hạng quỹ và không hứa hẹn lợi nhuận."}}
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "Theo dõi chứng chỉ quỹ như thế nào",
+  "inLanguage": "vi",
+  "step": [
+    {"@type": "HowToStep", "text": "Ghi lệnh mua, kèm quỹ, ngày, số tiền và NAV lúc mua."},
+    {"@type": "HowToStep", "text": "Ghi lệnh bán tương tự khi bán."},
+    {"@type": "HowToStep", "text": "Nhập NAV hiện tại của từng quỹ."},
+    {"@type": "HowToStep", "text": "Mở tab Danh mục để xem phân bổ và lãi lỗ, cuối tháng xuất báo cáo CSV."}
+  ]
+}
+</script>
+</head>
+<body>
+<header class="site-head">
+  <p class="top-strip">Miễn phí, chạy ngay trên trình duyệt, không cần tài khoản.</p>
+  <nav class="nav container" aria-label="Điều hướng chính">
+    <a class="wordmark" href="#top" aria-label="{{BRAND_NAME}}, về đầu trang">{{BRAND_NAME}}</a>
+    <ul class="nav-links">
+      <li><a href="#cach-dung">Cách dùng</a></li>
+      <li><a href="#so-sanh">So sánh</a></li>
+      <li><a href="#cau-hoi">Câu hỏi</a></li>
+      <li><a href="#rieng-tu">Riêng tư</a></li>
+      <li><a href="#nguon">Nguồn</a></li>
+    </ul>
+    <a class="btn btn--primary btn--small" href="#app">Mở sổ ngay</a>
+  </nav>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <h1>Mọi lệnh quỹ, một sổ duy nhất.</h1>
+        <p class="answer">{{BRAND_NAME}} ghi lệnh chứng chỉ quỹ trên trình duyệt. Ghi lệnh mua bán thủ công, nhập NAV từng quỹ. Xem danh mục xuyên Fmarket, Topi và Anfin trong một chỗ. Dữ liệu chỉ ở trên máy bạn.</p>
+        <p class="hero-actions">
+          <a class="btn btn--primary" href="#app">Mở sổ ngay</a>
+          <a class="btn btn--secondary" href="#cach-dung">Xem cách dùng</a>
+        </p>
+        <p class="hero-note">Miễn phí, không tài khoản, không cài đặt.</p>
+      </div>
+
+      <div class="app" id="app" aria-label="{{BRAND_NAME}}, sổ của bạn">
+        <div class="app-head">
+<h2 class="app-title">Sổ của bạn</h2>
+          <p class="app-sub"><span id="sample-badge" class="sample-badge" hidden>Dữ liệu mẫu</span><span id="order-count">Chưa có lệnh nào.</span></p>
+          <p class="app-tools">
+            <button type="button" class="btn btn--small btn--secondary" id="btn-sample">Xem thử với dữ liệu mẫu</button>
+            <button type="button" class="btn btn--small btn--secondary" id="btn-clear-sample" hidden>Xóa dữ liệu mẫu</button>
+            <button type="button" class="btn btn--small btn--ghost" id="btn-wipe">Xóa tất cả</button>
+          </p>
+        </div>
+
+        <div class="tabs" role="tablist" aria-label="Các phần của sổ">
+          <button type="button" class="tab is-active" role="tab" aria-selected="true" aria-controls="panel-order" id="tab-order" data-tab="panel-order">Ghi lệnh</button>
+          <button type="button" class="tab" role="tab" aria-selected="false" aria-controls="panel-portfolio" id="tab-portfolio" data-tab="panel-portfolio">Danh mục</button>
+          <button type="button" class="tab" role="tab" aria-selected="false" aria-controls="panel-chart" id="tab-chart" data-tab="panel-chart">Hiệu suất</button>
+          <button type="button" class="tab" role="tab" aria-selected="false" aria-controls="panel-report" id="tab-report" data-tab="panel-report">Báo cáo tháng</button>
+        </div>
+
+        <section class="panel is-active" id="panel-order" role="tabpanel" aria-labelledby="tab-order" tabindex="0">
+          <form id="order-form" novalidate>
+            <fieldset class="field-row">
+              <legend>Loại lệnh</legend>
+              <label class="key"><input type="radio" name="type" value="buy" checked> Mua</label>
+              <label class="key"><input type="radio" name="type" value="sell"> Bán</label>
+            </fieldset>
+            <p class="field">
+              <label for="f-fund">Quỹ</label>
+              <input id="f-fund" name="fund" type="text" list="fund-list" placeholder="Tên quỹ, ví dụ Quỹ cổ phiếu A" autocomplete="off" required>
+              <datalist id="fund-list"></datalist>
+            </p>
+            <p class="field">
+              <label for="f-date">Ngày giao dịch</label>
+              <input id="f-date" name="date" type="date" required>
+            </p>
+            <p class="field">
+              <label for="f-amount">Số tiền (đồng)</label>
+              <input id="f-amount" name="amount" type="number" min="1" step="1" inputmode="numeric" placeholder="5000000" required>
+            </p>
+            <p class="field">
+              <label for="f-nav">NAV lúc giao dịch (đồng)</label>
+              <input id="f-nav" name="nav" type="number" min="0.01" step="0.01" inputmode="decimal" placeholder="12450" required>
+            </p>
+            <p class="form-error" id="form-error" role="alert" hidden></p>
+            <p><button class="btn btn--primary" type="submit">Ghi lệnh</button></p>
+          </form>
+<h3 class="panel-sub">Lệnh đã ghi</h3>
+          <p class="empty" id="orders-empty">Chưa có lệnh nào. Ghi lệnh đầu tiên ở trên, hoặc bấm “Xem thử với dữ liệu mẫu”.</p>
+          <div class="table-wrap">
+            <table id="orders-table" hidden>
+              <thead><tr><th>Ngày</th><th>Loại</th><th>Quỹ</th><th class="num">Số tiền</th><th class="num">NAV</th><th class="num">CCQ</th><th><span class="visually-hidden">Xóa</span></th></tr></thead>
+              <tbody id="orders-body"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="panel" id="panel-portfolio" role="tabpanel" aria-labelledby="tab-portfolio" tabindex="0">
+          <dl class="totals">
+            <div><dt>Đã đầu tư</dt><dd class="num" id="total-invested">0 đ</dd></div>
+            <div><dt>Giá trị hiện tại</dt><dd class="num" id="total-value">0 đ</dd></div>
+            <div><dt>Lãi lỗ</dt><dd class="num" id="total-pl">0 đ</dd></div>
+          </dl>
+          <p class="empty" id="portfolio-empty">Chưa có lệnh nào nên chưa có danh mục. Ghi lệnh ở tab Ghi lệnh trước.</p>
+          <div class="table-wrap">
+            <table id="portfolio-table" hidden>
+              <thead><tr><th>Quỹ</th><th class="num">Số CCQ</th><th class="num">Đã đầu tư</th><th class="num">NAV hiện tại</th><th class="num">Giá trị</th><th class="num">Lãi lỗ</th></tr></thead>
+              <tbody id="portfolio-body"></tbody>
+            </table>
+          </div>
+          <div id="allocation" class="allocation" hidden></div>
+          <p class="fine">NAV hiện tại do bạn nhập tay. Sổ không lấy giá thị trường từ đâu cả.</p>
+        </section>
+
+        <section class="panel" id="panel-chart" role="tabpanel" aria-labelledby="tab-chart" tabindex="0">
+          <p class="empty" id="chart-empty">Chưa đủ dữ liệu để vẽ. Ghi ít nhất một lệnh mua là có biểu đồ.</p>
+          <canvas id="chart" width="640" height="320" role="img" aria-label="Biểu đồ hiệu suất danh mục theo tháng" hidden></canvas>
+          <p class="legend" id="chart-legend" hidden><span class="swatch swatch--value"></span> Giá trị danh mục <span class="swatch swatch--invested"></span> Tổng đã đầu tư</p>
+          <p class="fine">Giá trị mỗi tháng tính theo NAV đã ghi tới cuối tháng đó.</p>
+        </section>
+
+        <section class="panel" id="panel-report" role="tabpanel" aria-labelledby="tab-report" tabindex="0">
+          <p class="field">
+            <label for="f-month">Tháng báo cáo</label>
+            <input id="f-month" type="month">
+          </p>
+          <p class="empty" id="report-empty">Tháng này chưa có lệnh nào.</p>
+          <div class="table-wrap">
+            <table id="report-table" hidden>
+              <thead><tr><th>Ngày</th><th>Loại</th><th>Quỹ</th><th class="num">Số tiền</th><th class="num">NAV</th><th class="num">CCQ</th></tr></thead>
+              <tbody id="report-body"></tbody>
+            </table>
+          </div>
+          <dl class="totals">
+            <div><dt>Tổng mua trong tháng</dt><dd class="num" id="report-buy">0 đ</dd></div>
+            <div><dt>Tổng bán trong tháng</dt><dd class="num" id="report-sell">0 đ</dd></div>
+          </dl>
+          <p><button class="btn btn--primary" type="button" id="btn-csv">Xuất file CSV</button></p>
+        </section>
+
+        <p class="app-disclaimer">Sổ chỉ ghi chép và tính toán từ số bạn nhập. Không khuyến nghị mua, bán hay nắm giữ quỹ nào.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="cach-dung" aria-labelledby="howto-h">
+    <div class="container">
+      <div class="head-block">
+<h2 id="howto-h">Theo dõi chứng chỉ quỹ như thế nào</h2>
+        <p class="lead">Bốn bước, làm một lần rồi mỗi tháng chỉ mất vài phút cập nhật NAV.</p>
+        <p>Ví dụ với dữ liệu mẫu trong sổ: lệnh đầu tiên ngày 05/09/2026, đã đầu tư 17.000.000 đ, giá trị hiện tại 17.841.996 đ, lãi gần 5%; Quỹ mẫu B chiếm 57% giá trị danh mục.</p>
+      </div>
+      <div class="before-after">
+        <div class="plastic band--before">
+<h3>Trước: mở từng app</h3>
+          <p>Mở Fmarket xem một quỹ, mở Topi xem quỹ khác, mở Anfin xem quỹ còn lại. Cuối tháng cộng tay vào file riêng, con số nào cũng phải nhớ xem lấy từ đâu.</p>
+        </div>
+        <div class="plastic band--after">
+<h3>Sau: một sổ</h3>
+          <p>Ghi lệnh vào một sổ, nhập NAV từng quỹ một lần, mở tab Danh mục là thấy phân bổ, tổng đã đầu tư và giá trị hiện tại.</p>
+        </div>
+      </div>
+      <ol class="howto-steps">
+        <li>Ghi lệnh mua, kèm quỹ, ngày, số tiền và NAV lúc mua.</li>
+        <li>Ghi lệnh bán tương tự khi bán.</li>
+        <li>Nhập NAV hiện tại của từng quỹ.</li>
+        <li>Mở tab Danh mục để xem phân bổ và lãi lỗ, cuối tháng xuất báo cáo CSV.</li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section section--tint" id="so-sanh" aria-labelledby="compare-h">
+    <div class="container">
+      <div class="head-block">
+<h2 id="compare-h">Sổ lệnh quỹ khác Excel ở điểm nào</h2>
+        <p class="lead">Cùng ghi tay, khác ở chỗ sổ tính sẵn và gom đủ quỹ từ mọi app. Sổ tổng hợp số liệu bạn tự nhập từ Fmarket [1], Topi [2] và Anfin [3].</p>
+      </div>
+      <div class="table-wrap table--wide">
+        <table>
+          <thead><tr><th></th><th>Sổ lệnh quỹ</th><th>Excel</th><th>Xem trong từng app</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Ghi lệnh mua bán</th><td>Ghi tay, tính sẵn số CCQ</td><td>Ghi tay, tự làm công thức</td><td>Không ghi được</td></tr>
+            <tr><th scope="row">Danh mục xuyên app</th><td>Gộp Fmarket, Topi, Anfin</td><td>Tự gom tay</td><td>Mỗi app một danh mục</td></tr>
+            <tr><th scope="row">Biểu đồ hiệu suất</th><td>Có sẵn</td><td>Tự vẽ</td><td>Không có</td></tr>
+            <tr><th scope="row">Xuất báo cáo tháng</th><td>File CSV một nút bấm</td><td>Tự làm</td><td>Không có</td></tr>
+            <tr><th scope="row">Dữ liệu lưu ở đâu</th><td>Chỉ trên máy bạn</td><td>Trên máy bạn</td><td>Trên máy chủ của app</td></tr>
+            <tr><th scope="row">Giá</th><td>Miễn phí</td><td>Tùy bản quyền</td><td>Miễn phí</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="rieng-tu" aria-labelledby="privacy-h">
+    <div class="container split">
+      <div class="split-text">
+<h2 id="privacy-h">Dữ liệu của bạn ở đâu</h2>
+        <p class="lead">Ở trên máy bạn, và chỉ ở đó.</p>
+        <dl class="facts">
+          <div><dt>Lưu ở đâu</dt><dd>Trong localStorage của trình duyệt trên máy bạn.</dd></div>
+          <div><dt>Gửi đi đâu</dt><dd>Không gửi đi đâu. Không có máy chủ.</dd></div>
+          <div><dt>Tài khoản</dt><dd>Không cần. Mở trang là dùng được.</dd></div>
+          <div><dt>Theo dõi</dt><dd>Không có. Không cookie theo dõi, không thống kê.</dd></div>
+        </dl>
+        <p>Xóa dữ liệu trình duyệt là mất sổ, nên hãy xuất file CSV cuối mỗi tháng để giữ bản sao.</p>
+      </div>
+      <div class="band--ink statement">
+        <p>Dữ liệu chỉ ở trên máy bạn, chúng tôi không thu thập gì.</p>
+      </div>
+    </div>
+    <div class="container">
+      <p class="disclaimer">{{BRAND_NAME}} không phải là tư vấn đầu tư. Sổ không khuyến nghị mua, bán hay nắm giữ quỹ nào, không xếp hạng quỹ và không hứa hẹn lợi nhuận. Mọi con số trên trang đều do bạn nhập và do sổ tính ra.</p>
+    </div>
+  </section>
+
+  <section class="section" id="cau-hoi" aria-labelledby="faq-h">
+    <div class="container">
+      <div class="head-block">
+<h2 id="faq-h">Câu hỏi thường gặp</h2>
+      </div>
+      <div class="faq-rows">
+        <div class="faq-row">
+<h3>Theo dõi chứng chỉ quỹ như thế nào?</h3>
+          <p>Ghi từng lệnh mua và bán, kèm quỹ, ngày, số tiền và NAV lúc giao dịch. Nhập NAV hiện tại của từng quỹ, sổ tự tính phân bổ, tổng đã đầu tư, giá trị hiện tại và lãi lỗ.</p>
+        </div>
+        <div class="faq-row">
+<h3>Xem tất cả quỹ ở nhiều app trong một chỗ được không?</h3>
+          <p>Được. Bạn ghi lệnh từ Fmarket, Topi, Anfin hay bất cứ app nào vào cùng một sổ, danh mục hiển thị gộp theo quỹ, không cần đăng nhập app nào cả.</p>
+        </div>
+        <div class="faq-row">
+<h3>Dữ liệu của tôi có rời khỏi máy không?</h3>
+          <p>Không. Dữ liệu chỉ lưu trong localStorage trên trình duyệt của bạn. Xóa dữ liệu trình duyệt là mất sổ, nên hãy xuất file CSV cuối mỗi tháng để giữ bản sao.</p>
+        </div>
+        <div class="faq-row">
+<h3>NAV là gì, lấy ở đâu?</h3>
+          <p>NAV là giá một chứng chỉ quỹ, do công ty quản lý quỹ công bố mỗi ngày giao dịch. Bạn xem NAV trong app mình mua quỹ rồi nhập tay vào sổ.</p>
+        </div>
+        <div class="faq-row">
+<h3>Sổ có gợi ý nên mua quỹ nào không?</h3>
+          <p>Không. Sổ chỉ ghi chép và tính toán từ số bạn nhập. Sổ không khuyến nghị mua, bán hay nắm giữ quỹ nào, không xếp hạng quỹ và không hứa hẹn lợi nhuận.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="nguon" aria-labelledby="sources-h">
+    <div class="container">
+      <div class="head-block">
+<h2 id="sources-h">Nguồn tham khảo</h2>
+        <p class="lead">Ba app dưới đây là nơi bạn tra NAV và đặt lệnh quỹ, rồi ghi lại vào sổ.</p>
+      </div>
+      <ol class="sources">
+        <li>[1] Fmarket, source: <a href="https://fmarket.vn">https://fmarket.vn</a>, trang chủ app Fmarket.</li>
+        <li>[2] Topi, source: <a href="https://topi.vn">https://topi.vn</a>, trang chủ app Topi.</li>
+        <li>[3] Anfin, source: <a href="https://anfin.vn">https://anfin.vn</a>, trang chủ app Anfin.</li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="band band--close" aria-label="Mở sổ">
+    <div class="container band--close-in">
+      <p class="band--close-text">Sổ trống hay sổ mẫu, bạn quyết.</p>
+      <a class="btn btn--primary" href="#app">Mở sổ ngay</a>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <p class="footer-mark">{{BRAND_NAME}}</p>
+    <p class="footer-byline">{{AUTHOR_BIO}}. Cập nhật lần cuối: {{UPDATED}}.</p>
+    <ul class="footer-links">
+      <li><a href="#cach-dung">Cách dùng</a></li>
+      <li><a href="#so-sanh">So sánh</a></li>
+      <li><a href="#cau-hoi">Câu hỏi</a></li>
+      <li><a href="#rieng-tu">Riêng tư</a></li>
+    </ul>
+    <p class="footer-fine">Dữ liệu chỉ ở trên máy bạn, chúng tôi không thu thập gì. {{BRAND_NAME}} không phải là tư vấn đầu tư.</p>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
