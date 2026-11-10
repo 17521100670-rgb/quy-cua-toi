@@ -50,6 +50,15 @@
     return String(s || '').toUpperCase().replace(/[\s\-]+/g, '');
   }
 
+  // Bỏ dấu tiếng Việt để khớp tên cột không phân biệt có dấu hay không.
+  function stripAccents(s) {
+    return String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D');
+  }
+
+  function normalizeHeader(s) {
+    return stripAccents(String(s || '')).toLowerCase().replace(/\s+/g, ' ').trim();
+  }
+
   function fundDisplay(f) { return f.code + ' - ' + f.name; }
 
   // Chuẩn hoá tên quỹ về dạng chuẩn "MÃ - Tên đầy đủ" khi khớp mã, tên đầy đủ
@@ -65,6 +74,31 @@
       for (var j = 0; j < f.aliases.length; j++) {
         if (norm === normalizeCode(f.aliases[j])) return fundDisplay(f);
       }
+    }
+    return raw;
+  }
+
+  // Trích mã quỹ từ ô "Sản phẩm" của sao kê Fmarket: ô thường có dạng
+  // "VMEEF - Linh hoạt" hoặc "VCBF-TBF (Linh hoạt)". Ưu tiên khớp chính xác
+  // (mã/tên/alias), rồi tìm mã trong từng từ của ô, cuối cùng giữ từ đầu
+  // tiên giống mã. Không khớp thì giữ nguyên như người dùng gõ.
+  function extractFundCode(cell) {
+    var raw = String(cell || '').trim();
+    if (!raw) return raw;
+    var canon = canonicalFund(raw);
+    if (canon !== raw) return canon;
+    var tokens = raw.split(/[^A-Za-z0-9À-ỹ\-]+/).filter(function (t) { return t !== ''; });
+    var i, j;
+    for (i = 0; i < tokens.length; i++) {
+      var norm = normalizeCode(tokens[i]);
+      for (j = 0; j < FUNDS.length; j++) {
+        if (norm === normalizeCode(FUNDS[j].code)) return fundDisplay(FUNDS[j]);
+      }
+    }
+    for (i = 0; i < tokens.length; i++) {
+      var plain = stripAccents(tokens[i]).toLowerCase();
+      if (plain === 'linh' || plain === 'hoat' || plain === 'flexible') continue;
+      if (/^[A-Za-z0-9][A-Za-z0-9\-]{2,}$/.test(tokens[i])) return tokens[i].toUpperCase();
     }
     return raw;
   }
@@ -430,22 +464,38 @@
   }
 
   function detectDelimiter(firstLine) {
+    var tabs = (firstLine.match(/\t/g) || []).length;
     var commas = (firstLine.match(/,/g) || []).length;
     var semis = (firstLine.match(/;/g) || []).length;
+    // Dán bảng copy từ Excel: các ô cách nhau bằng tab.
+    if (tabs > 0 && tabs >= commas && tabs >= semis) return '\t';
     return semis > commas ? ';' : ',';
   }
 
   var CSV_HEADERS = {
-    date: ['ngày', 'ngay', 'date', 'ngày giao dịch', 'thời gian'],
-    fund: ['quỹ', 'quy', 'fund', 'mã', 'mã quỹ', 'tên quỹ'],
-    type: ['loại', 'loai', 'type', 'mua/bán', 'giao dịch'],
-    amount: ['số tiền', 'so tien', 'tiền', 'tien', 'amount', 'giá trị', 'số tiền (vnd)'],
-    nav: ['nav', 'nav lúc giao dịch', 'giá', 'gia', 'đơn giá', 'nav/ccq']
+    date: ['ngày', 'ngay', 'date', 'ngày giao dịch', 'ngày gd', 'ngay gd', 'transaction date', 'thời gian'],
+    fund: ['quỹ', 'quy', 'fund', 'mã', 'mã quỹ', 'tên quỹ', 'sản phẩm', 'san pham'],
+    type: ['loại', 'loai', 'type', 'mua/bán', 'giao dịch', 'loại lệnh', 'loai lenh', 'transaction type'],
+    amount: ['số tiền', 'so tien', 'tiền', 'tien', 'amount', 'giá trị', 'số tiền (vnd)', 'gt tương ứng', 'gt tuong ung', 'holding value', 'value'],
+    nav: ['nav', 'nav lúc giao dịch', 'giá', 'gia', 'đơn giá', 'nav/ccq', 'giá gd', 'gia gd', 'transaction price', 'price'],
+    quantity: ['số lượng', 'so luong', 'quantity', 'ccq', 'số lượng (ccq)', 'quantity (unit)']
+  };
+
+  // Preset Fmarket: tiêu đề cột song ngữ Việt/Anh của sao kê chi tiết giao dịch
+  // Fmarket (Lịch sử giao dịch → Xuất File). Khớp theo tên đã chuẩn hoá
+  // (chữ thường, bỏ dấu, gọn khoảng trắng), tiêu đề chứa tên cột là khớp.
+  var FMARKET_HEADERS = {
+    date: ['ngay gd', 'transaction date'],
+    type: ['loai lenh', 'transaction type'],
+    fund: ['san pham', 'fund'],
+    quantity: ['so luong', 'quantity'],
+    nav: ['gia gd', 'transaction price'],
+    amount: ['gt tuong ung', 'holding value']
   };
 
   function headerRole(h) {
     var n = String(h || '').trim().toLowerCase();
-    var roles = ['date', 'fund', 'type', 'amount', 'nav'];
+    var roles = ['date', 'fund', 'type', 'amount', 'nav', 'quantity'];
     for (var i = 0; i < roles.length; i++) {
       var keys = CSV_HEADERS[roles[i]];
       for (var j = 0; j < keys.length; j++) {
@@ -453,6 +503,39 @@
       }
     }
     return '';
+  }
+
+  // Nhận diện preset Fmarket từ tiêu đề cột: đủ 4 vai trò trở lên khớp tên cột
+  // Fmarket, trong đó bắt buộc có Ngày và NAV. Trả mapping đã điền sẵn, hoặc
+  // null khi không khớp (khi đó dùng guessMapping + gán tay).
+  function fmarketMapping(parsed) {
+    if (!parsed || !parsed.headers) return null;
+    var ncols = parsed.headers.length;
+    parsed.rows.forEach(function (r) { ncols = Math.max(ncols, r.length); });
+    var mapping = [];
+    for (var c = 0; c < ncols; c++) mapping.push('');
+    var used = {};
+    var roles = ['date', 'type', 'fund', 'quantity', 'nav', 'amount'];
+    for (var c = 0; c < parsed.headers.length; c++) {
+      var h = normalizeHeader(parsed.headers[c]);
+      for (var r = 0; r < roles.length; r++) {
+        var role = roles[r];
+        if (used[role]) continue;
+        var aliases = FMARKET_HEADERS[role];
+        for (var a = 0; a < aliases.length; a++) {
+          if (h.indexOf(aliases[a]) !== -1) { mapping[c] = role; used[role] = true; break; }
+        }
+        if (mapping[c]) break;
+      }
+    }
+    var matched = 0;
+    mapping.forEach(function (m) { if (m) matched++; });
+    if (matched >= 4 && mapping.indexOf('date') !== -1 && mapping.indexOf('nav') !== -1) return mapping;
+    return null;
+  }
+
+  function detectPreset(parsed) {
+    return fmarketMapping(parsed) ? 'fmarket' : '';
   }
 
   function parseCSVText(text) {
@@ -509,6 +592,10 @@
     var n = String(s || '').trim().toLowerCase();
     if (['mua', 'buy', 'm', 'b', 'mua vào', 'mua vao'].indexOf(n) !== -1) return 'buy';
     if (['bán', 'ban', 'sell', 's', 'bán ra', 'ban ra'].indexOf(n) !== -1) return 'sell';
+    // Dạng "Mua/Buy", "Bán/Sell" trong sao kê: khớp theo từ đầu.
+    var p = stripAccents(n);
+    if (p.indexOf('mua') === 0 || p.indexOf('buy') === 0) return 'buy';
+    if (p.indexOf('ban') === 0 || p.indexOf('sell') === 0) return 'sell';
     return null;
   }
 
@@ -548,10 +635,10 @@
   // Kiểm tra từng dòng sau khi gán cột. Lệnh bán được kiểm tra theo thứ tự
   // ngày, tính cả số CCQ đang giữ trong sổ và các dòng nhập trước trong đợt.
   function validateImportRows(mapping, rows, existingOrders) {
-    var idx = { date: mapping.indexOf('date'), fund: mapping.indexOf('fund'), type: mapping.indexOf('type'), amount: mapping.indexOf('amount'), nav: mapping.indexOf('nav') };
+    var idx = { date: mapping.indexOf('date'), fund: mapping.indexOf('fund'), type: mapping.indexOf('type'), amount: mapping.indexOf('amount'), nav: mapping.indexOf('nav'), quantity: mapping.indexOf('quantity') };
     var valid = [], errors = [];
-    if (idx.date < 0 || idx.fund < 0 || idx.amount < 0 || idx.nav < 0) {
-      return { valid: valid, errors: [{ row: 0, reason: 'Chưa gán đủ 4 cột bắt buộc: Ngày, Quỹ, Số tiền, NAV.' }], missing: true };
+    if (idx.date < 0 || idx.fund < 0 || idx.nav < 0 || (idx.amount < 0 && idx.quantity < 0)) {
+      return { valid: valid, errors: [{ row: 0, reason: 'Chưa gán đủ cột bắt buộc: Ngày, Quỹ, NAV và Số tiền (hoặc Số lượng thay cho Số tiền).' }], missing: true };
     }
     var holdings = {};
     (existingOrders || []).forEach(function (o) {
@@ -561,14 +648,18 @@
     rows.forEach(function (r, i) {
       var lineNo = i + 1;
       var date = parseDateFlex(r[idx.date] || '');
-      var fund = canonicalFund(r[idx.fund] || '');
-      var amount = parseVNNumber(r[idx.amount]);
+      var fund = extractFundCode(r[idx.fund] || '');
       var nav = parseVNNumber(r[idx.nav]);
+      var amount = idx.amount >= 0 ? parseVNNumber(r[idx.amount]) : null;
+      var qty = idx.quantity >= 0 ? parseVNNumber(r[idx.quantity]) : null;
+      // Sao kê Fmarket có cả Số lượng và GT: ưu tiên GT làm số tiền; thiếu GT
+      // thì số tiền = số lượng × giá.
+      if ((amount == null || amount <= 0) && qty != null && qty > 0 && nav != null && nav > 0) amount = qty * nav;
       var type = idx.type >= 0 ? parseTypeFlex(r[idx.type]) : 'buy';
       if (!date) { errors.push({ row: lineNo, reason: 'Ngày không đúng định dạng (dùng DD/MM/YYYY hoặc YYYY-MM-DD).' }); return; }
       if (!fund) { errors.push({ row: lineNo, reason: 'Thiếu tên quỹ.' }); return; }
-      if (amount == null || amount <= 0) { errors.push({ row: lineNo, reason: 'Số tiền không phải số lớn hơn 0.' }); return; }
       if (nav == null || nav <= 0) { errors.push({ row: lineNo, reason: 'NAV không phải số lớn hơn 0.' }); return; }
+      if (amount == null || amount <= 0) { errors.push({ row: lineNo, reason: 'Số tiền không phải số lớn hơn 0.' }); return; }
       if (!type) { errors.push({ row: lineNo, reason: 'Loại lệnh không rõ (dùng Mua hoặc Bán).' }); return; }
       cands.push({ type: type, fund: fund, date: date, amount: amount, nav: nav, lineNo: lineNo });
     });
@@ -650,6 +741,7 @@
     navDateOf: navDateOf, navAgeDays: navAgeDays, goalProgress: goalProgress,
     parseCSVText: parseCSVText, guessMapping: guessMapping, validateImportRows: validateImportRows,
     parseVNNumber: parseVNNumber, parseDateFlex: parseDateFlex, parseTypeFlex: parseTypeFlex,
+    detectPreset: detectPreset, fmarketMapping: fmarketMapping, extractFundCode: extractFundCode,
     buildBackup: buildBackup, parseBackup: parseBackup
   };
 
@@ -1055,16 +1147,23 @@
 
   function renderImport() {
     var mapEl = $('#csv-mapping');
+    var presetEl = $('#csv-preset');
     if (!importParsed) {
       mapEl.innerHTML = '';
+      if (presetEl) presetEl.textContent = '';
       renderImportPreview();
       return;
+    }
+    if (presetEl) {
+      presetEl.textContent = importParsed.preset === 'fmarket'
+        ? 'Đã nhận diện preset Fmarket. Mapping đã điền sẵn, bạn vẫn sửa được từng cột.'
+        : 'Chưa nhận diện preset. Gán cột thủ công bên dưới.';
     }
     var parsed = importParsed.parsed;
     var mapping = importParsed.mapping;
     var ncols = 0;
     parsed.rows.forEach(function (r) { ncols = Math.max(ncols, r.length); });
-    var roles = [['', 'Bỏ qua cột này'], ['date', 'Ngày'], ['fund', 'Quỹ'], ['type', 'Loại (mua/bán)'], ['amount', 'Số tiền'], ['nav', 'NAV']];
+    var roles = [['', 'Bỏ qua cột này'], ['date', 'Ngày'], ['fund', 'Quỹ'], ['type', 'Loại (mua/bán)'], ['amount', 'Số tiền'], ['nav', 'NAV'], ['quantity', 'Số lượng (CCQ)']];
     var html = '<table><thead><tr><th>Cột</th><th>Ví dụ</th><th>Gán làm</th></tr></thead><tbody>';
     for (var c = 0; c < ncols; c++) {
       var samples = parsed.rows.slice(0, 3).map(function (r) { return r[c] || ''; }).join(' | ');
@@ -1183,7 +1282,8 @@
       $('#csv-result').textContent = 'Chưa có dòng CSV nào để đọc. Dán nội dung file CSV vào ô trên trước.';
       return;
     }
-    importParsed = { parsed: parsed, mapping: guessMapping(parsed), result: null };
+    var fm = fmarketMapping(parsed);
+    importParsed = { parsed: parsed, mapping: fm || guessMapping(parsed), preset: fm ? 'fmarket' : '', result: null };
     renderImport();
   });
   $('#btn-csv-import').addEventListener('click', function () {

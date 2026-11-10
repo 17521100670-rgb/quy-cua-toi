@@ -207,18 +207,19 @@
         </section>
 
         <section class="panel" id="panel-import" role="tabpanel" aria-labelledby="tab-import" tabindex="0">
-          <p class="fine">Dán nội dung file CSV rồi gán từng cột cho đúng vai trò, xem trước rồi mới nhập. Sổ không đoán định dạng file của riêng app nào.</p>
+          <p class="fine">Dán bảng đã copy từ file Excel xuất ở Fmarket (Lịch sử giao dịch → Xuất File) - sổ tự nhận diện cột Fmarket.</p>
           <p class="field">
             <label for="csv-input">Nội dung CSV</label>
             <textarea id="csv-input" rows="6" placeholder="ngày,quỹ,loại,số tiền,NAV&#10;05/09/2026,VESAF,mua,5000000,12450"></textarea>
           </p>
           <p><button class="btn btn--primary" type="button" id="btn-csv-parse">Đọc CSV và gán cột</button></p>
+          <p class="fine" id="csv-preset" role="status"></p>
           <div id="csv-mapping" class="table-wrap"></div>
           <div id="csv-preview" class="table-wrap"></div>
           <div class="import-errors" id="csv-errors" role="alert"></div>
           <p><button class="btn btn--primary" type="button" id="btn-csv-import" disabled>Nhập lệnh</button></p>
           <p class="fine" id="csv-result" role="status"></p>
-          <p class="fine">Cột bắt buộc: Ngày, Quỹ, Số tiền, NAV. Cột Loại có thể bỏ qua, mặc định là Mua. Ngày chấp nhận DD/MM/YYYY hoặc YYYY-MM-DD. Số tiền chấp nhận dấu chấm phân cách hàng nghìn, ví dụ 5.000.000.</p>
+          <p class="fine">Cột bắt buộc: Ngày, Quỹ, NAV và Số tiền (hoặc Số lượng nếu thiếu Số tiền). Cột Loại có thể bỏ qua, mặc định là Mua. Ngày chấp nhận DD/MM/YYYY hoặc YYYY-MM-DD. Số chấp nhận cả hai kiểu phân cách: 5.000.000 hoặc 5,000,000.</p>
         </section>
 
         <section class="panel" id="panel-backup" role="tabpanel" aria-labelledby="tab-backup" tabindex="0">
